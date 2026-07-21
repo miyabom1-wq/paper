@@ -1,62 +1,496 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-192.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f2ea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>PAPER</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#151923;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;padding:18px 14px 80px}.wrap{max-width:720px;margin:auto}header{display:flex;align-items:center;gap:10px;margin-bottom:16px}.logo{width:34px;height:34px;border-radius:10px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:800}.sub{font-size:12px;color:#687386}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:sticky;top:0;background:#eef1f5;padding:6px 0;z-index:5}.tabs button,.btn{border:1px solid #cfd5de;background:#fff;border-radius:9px;padding:10px;font-weight:650}.tabs button.active,.btn.primary{background:#111827;color:#fff;border-color:#111827}.panel{display:none}.panel.active{display:block}.card{background:#fff;border:1px solid #d9dee6;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 10px rgba(20,30,50,.05)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.k{font-size:11px;color:#737d8c}.v{font-size:18px;font-weight:750}.up{color:#13865b}.down{color:#d22d43}input,select,textarea{width:100%;border:1px solid #cfd5de;border-radius:9px;padding:10px;background:#fff;font:inherit}label{display:block;font-size:12px;color:#667085;margin:9px 0 4px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{cursor:pointer}.btn.danger{color:#c92a3f}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #edf0f4;padding-top:10px;margin-top:10px}.badge{font-size:10px;padding:3px 7px;border-radius:999px;background:#e9eef5;color:#445063}.empty{text-align:center;color:#7b8492;padding:28px 10px}.mono{font-variant-numeric:tabular-nums}.note{font-size:11px;color:#6b7482;line-height:1.6}.wide{grid-column:1/-1}@media(max-width:520px){.tabs button{font-size:12px;padding:9px 4px}}
+:root{
+  --bg:#f6f2ea;
+  --card:#fffdf9;
+  --card2:#fbf7ef;
+  --line:#e7dfd1;
+  --line2:#efe8dc;
+  --text:#1f2430;
+  --muted:#7b766d;
+  --accent:#e0a223;
+  --accent2:#f0b948;
+  --accentBg:#fbf3e1;
+  --vantage:#128a73;
+  --good:#d47f11;
+  --bad:#c34a4a;
+  --shadow:0 8px 24px rgba(30,40,55,.06);
+  --radius:18px;
+  --radius-sm:14px;
+  --radius-lg:24px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+body{padding:18px 16px 94px}
+button,input,select,textarea{font:inherit}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:860px;margin:0 auto}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px}
+.brand{display:flex;gap:14px;align-items:flex-start}
+.appicon{width:60px;height:60px;border-radius:17px;box-shadow:var(--shadow)}
+.title{font-size:28px;line-height:1;font-weight:800;letter-spacing:.01em;margin-top:3px}
+.sub{font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:.04em}
+.shortcut{width:52px;height:52px;border-radius:16px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;box-shadow:var(--shadow);color:var(--vantage)}
+.shortcut svg{width:24px;height:24px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:transparent;margin:18px 0 16px}
+.tabs button,.bottomnav button{border:none;background:var(--card);color:var(--muted);padding:16px 8px;border-radius:18px;font-weight:750;box-shadow:var(--shadow);cursor:pointer}
+.tabs button.active,.bottomnav button.active{color:var(--text);position:relative}
+.tabs button.active::after{content:"";position:absolute;left:22%;right:22%;bottom:8px;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line2);border-radius:24px;box-shadow:var(--shadow)}
+.pad{padding:18px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:0;overflow:hidden}
+.summary .cell{padding:20px 18px;border-right:1px solid var(--line2)}
+.summary .cell:last-child{border-right:none}
+.k{font-size:12px;color:var(--muted);margin-bottom:7px}
+.v{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.v.good{color:var(--good)}
+.v.bad{color:var(--bad)}
+.inline-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--muted);font-size:12px;margin:14px 2px 10px}
+.refresh{display:flex;align-items:center;gap:7px;border:none;background:transparent;color:var(--muted);cursor:pointer}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 10px}
+.section-title{font-size:18px;font-weight:800}
+.count{font-size:13px;color:var(--muted)}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.position{padding:18px}
+.pos-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.badge-coin{width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#22293d,#121726);color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.04em;flex:0 0 auto}
+.pos-title-wrap{display:flex;gap:16px;align-items:flex-start}
+.pos-name{font-size:19px;font-weight:800}
+.pos-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.side-pill{padding:8px 14px;border-radius:999px;background:var(--accentBg);color:var(--good);font-weight:800;font-size:13px}
+.menu-dot{font-size:22px;color:#888;padding:0 4px}
+.grid4,.grid3,.grid2{display:grid;gap:8px;margin-top:18px}
+.grid4{grid-template-columns:repeat(4,1fr)}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid2{grid-template-columns:repeat(2,1fr)}
+.metric{padding:8px 6px}
+.metric .mv{font-size:18px;font-weight:800;margin-top:3px}
+.metric .mv.good{color:var(--good)}
+.metric .mv.bad{color:var(--bad)}
+.hr{height:1px;background:var(--line2);margin:16px 0}
+.rr-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin:10px 0 18px}
+.rr-bar{height:8px;border-radius:999px;background:#e8e3d9;overflow:hidden}
+.rr-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:inherit}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.btn{padding:16px;border-radius:18px;cursor:pointer;font-weight:800}
+.btn-outline{border:2px solid var(--accent);background:#fff;color:var(--good)}
+.btn-fill{border:2px solid transparent;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+.totalbar{display:grid;grid-template-columns:56px 1fr 1fr 1fr 24px;gap:14px;align-items:center;padding:16px 18px;margin-top:14px}
+.donut{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--accent) 0 120deg,#32394b 120deg 220deg,#eee4d4 220deg 360deg)}
+.totalitem{padding:2px 0;border-right:1px solid var(--line2)}
+.totalitem:last-of-type{border-right:none}
+.totalitem .mv{font-size:16px}
+.chev{font-size:28px;color:#8d8578;text-align:right}
+.entry-card{padding:18px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 14px;color:var(--text)}
+.field textarea{min-height:94px;resize:vertical}
+.span2{grid-column:1/-1}
+.primarywide{width:100%;margin-top:16px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border-radius:18px;padding:16px;font-weight:800}
+.helper-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ghost{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:16px;padding:12px 14px;font-weight:700}
+.h-card{padding:16px 18px}
+.h-card + .h-card{margin-top:10px}
+.rowline{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.h-pnl{font-size:18px;font-weight:800}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stats-card{padding:18px}
+.stats-card .big{font-size:30px;font-weight:800}
+.stats-card .subk{font-size:12px;color:var(--muted);margin-bottom:8px}
+.bottomnav{position:fixed;left:0;right:0;bottom:0;background:rgba(246,242,234,.92);backdrop-filter:blur(14px);padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.bottomnav .inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bottomnav button{padding:12px 6px;font-size:12px;background:transparent;box-shadow:none}
+.bottomnav button .ic{display:block;font-size:18px;margin-bottom:4px}
+.top-spacer{height:2px}
+@media (max-width:760px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .summary .cell:nth-child(2){border-right:none}
+  .summary .cell:nth-child(-n+2){border-bottom:1px solid var(--line2)}
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:1fr}
+  .totalbar{grid-template-columns:50px 1fr;row-gap:10px}
+  .totalitem{border-right:none;border-top:1px solid var(--line2);padding-top:10px}
+}
+@media (max-width:560px){
+  body{padding:14px 12px 92px}
+  .title{font-size:24px}
+  .appicon{width:54px;height:54px}
+  .tabs button{padding:14px 4px;font-size:13px}
+  .formgrid,.stats-grid,.grid2{grid-template-columns:1fr}
+  .actions{grid-template-columns:1fr}
+  .summary .cell{padding:16px 14px}
+}
 </style>
 </head>
-<body><div class="wrap">
-<header><div class="logo">P</div><div><b>PAPER</b><div class="sub">FRAME → ENTRY → EXIT</div></div><div style="margin-left:auto;display:flex;gap:6px"><a class="btn" href="https://miyabom1-wq.github.io/cockpit/" style="text-decoration:none;font-size:12px">VANTAGE</a><button id="installApp" class="btn" style="font-size:12px">インストール</button></div></header>
-<div class="tabs"><button data-tab="positions" class="active">建玉</button><button data-tab="entry">ENTRY</button><button data-tab="history">履歴</button><button data-tab="stats">成績</button></div>
-<section id="positions" class="panel active"></section>
-<section id="entry" class="panel"><div class="card"><b>仮想エントリー</b><div class="grid">
-<div><label>市場</label><select id="market"><option value="jp">日本株</option><option value="us">米国株</option></select></div><div><label>銘柄コード</label><input id="symbol" placeholder="285A / MU"></div>
-<div><label>銘柄名</label><input id="name" placeholder="キオクシア"></div><div><label>FRAME状態</label><select id="frame"><option>READY</option><option>TRIGGERED</option><option>WAIT</option></select></div>
-<div><label>約定価格</label><input id="price" type="number" step="any"></div><div><label>数量</label><input id="qty" type="number" step="any"></div>
-<div><label>損切価格</label><input id="stop" type="number" step="any"></div><div><label>目標価格</label><input id="target" type="number" step="any"></div>
-<div><label>VANTAGE判定</label><input id="lane" placeholder="B・反転初動"></div><div><label>地合い</label><input id="regime" placeholder="通常 / 弱い"></div>
-<div class="wide"><label>エントリー根拠</label><textarea id="thesis" placeholder="出来高、RS、押し目、再加速条件など"></textarea></div>
-<div class="wide"><label>無効化条件</label><textarea id="invalid" placeholder="終値で5日線割れ、前日安値割れなど"></textarea></div></div>
-<div class="actions"><button class="btn primary" id="add">エントリー登録</button><button class="btn" id="loadVantage">VANTAGEを開く</button><button class="btn" id="backup">CSV出力</button></div><div id="vantageList" class="note"></div></div></section>
-<section id="history" class="panel"></section><section id="stats" class="panel"></section>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <img class="appicon" src="./icon-192.png" alt="PAPER">
+      <div>
+        <div class="title">PAPER</div>
+        <div class="sub">FRAME → ENTRY → EXIT</div>
+      </div>
+    </div>
+    <a class="shortcut" href="https://miyabom1-wq.github.io/cockpit/" title="VANTAGEを開く" aria-label="VANTAGEを開く">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 18h16"></path>
+        <path d="M6 14l4-4 3 3 5-6"></path>
+        <path d="M15 7h3v3"></path>
+      </svg>
+    </a>
+  </div>
+
+  <div class="tabs" id="topTabs">
+    <button data-tab="positions" class="active">建玉</button>
+    <button data-tab="entry">ENTRY</button>
+    <button data-tab="history">履歴</button>
+    <button data-tab="stats">成績</button>
+  </div>
+
+  <section id="positions" class="panel active"></section>
+
+  <section id="entry" class="panel">
+    <div class="card entry-card">
+      <div class="section-head" style="margin:0 0 10px">
+        <div class="section-title">仮想エントリー</div>
+        <div class="count">内容はローカル保存</div>
+      </div>
+
+      <div class="formgrid">
+        <div class="field"><label>市場</label><select id="market"><option value="jp">日本株</option><option value="us">米国株</option></select></div>
+        <div class="field"><label>FRAME状態</label><select id="frame"><option>READY</option><option>TRIGGERED</option><option>WAIT</option></select></div>
+        <div class="field"><label>銘柄コード</label><input id="symbol" placeholder="285A / MU"></div>
+        <div class="field"><label>銘柄名</label><input id="name" placeholder="キオクシア"></div>
+        <div class="field"><label>約定価格</label><input id="price" type="number" step="any"></div>
+        <div class="field"><label>数量</label><input id="qty" type="number" step="any"></div>
+        <div class="field"><label>損切価格</label><input id="stop" type="number" step="any"></div>
+        <div class="field"><label>目標価格</label><input id="target" type="number" step="any"></div>
+        <div class="field"><label>VANTAGE判定</label><input id="lane" placeholder="B・反転初動"></div>
+        <div class="field"><label>地合い</label><input id="regime" placeholder="通常 / 弱い"></div>
+        <div class="field span2"><label>エントリー根拠</label><textarea id="thesis" placeholder="出来高、RS、押し目、再加速条件など"></textarea></div>
+        <div class="field span2"><label>無効化条件</label><textarea id="invalid" placeholder="終値で5日線割れ、前日安値割れなど"></textarea></div>
+      </div>
+
+      <button class="primarywide" id="add">エントリー登録</button>
+
+      <div class="helper-row">
+        <button class="ghost" id="openVantage">VANTAGEを開く</button>
+        <button class="ghost" id="backup">CSV出力</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="panel"></section>
+
+  <section id="stats" class="panel"></section>
 </div>
+
+<nav class="bottomnav">
+  <div class="inner" id="bottomTabs">
+    <button data-tab="positions" class="active"><span class="ic">◔</span>建玉</button>
+    <button data-tab="entry"><span class="ic">◎</span>ENTRY</button>
+    <button data-tab="history"><span class="ic">◷</span>履歴</button>
+    <button data-tab="stats"><span class="ic">☰</span>成績</button>
+  </div>
+</nav>
+
 <script>
-const KEY='paper-trades-v1';let db=JSON.parse(localStorage.getItem(KEY)||'{"positions":[],"history":[]}');
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db));const n=x=>Number(x||0);const fmt=x=>new Intl.NumberFormat('ja-JP',{maximumFractionDigits:2}).format(x);
-function tabs(){document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');render()})}
-function render(){renderPositions();renderHistory();renderStats()}
-function renderPositions(){let el=document.getElementById('positions');if(!db.positions.length){el.innerHTML='<div class="card empty">建玉はありません</div>';return}el.innerHTML=db.positions.map(p=>{let cur=n(p.current||p.avg),pl=(cur-p.avg)*p.qty,rate=(cur/p.avg-1)*100,risk=(p.avg-p.stop)*p.qty,r=risk>0?pl/risk:0;return `<div class="card"><div style="display:flex;justify-content:space-between"><div><b>${p.name||p.symbol}</b><div class="sub">${p.symbol} · ${p.market.toUpperCase()} · ${p.frame}</div></div><span class="badge">${p.lane||'未分類'}</span></div><div class="grid" style="margin-top:12px"><div><div class="k">平均取得</div><div class="v mono">${fmt(p.avg)}</div></div><div><div class="k">現在値</div><input class="cur" data-id="${p.id}" type="number" step="any" value="${cur}"></div><div><div class="k">含み損益</div><div class="v ${pl>=0?'up':'down'} mono">${pl>=0?'+':''}${fmt(pl)}</div></div><div><div class="k">損益率 / R</div><div class="v ${rate>=0?'up':'down'} mono">${rate.toFixed(2)}% / ${r.toFixed(2)}R</div></div></div><div class="note">損切 ${fmt(p.stop)} ｜ 目標 ${fmt(p.target)}<br>${p.thesis||''}</div><div class="actions"><button class="btn" onclick="exitTrade('${p.id}',true)">一部EXIT</button><button class="btn danger" onclick="exitTrade('${p.id}',false)">全EXIT</button></div></div>`}).join('');document.querySelectorAll('.cur').forEach(i=>i.onchange=()=>{let p=db.positions.find(x=>x.id===i.dataset.id);p.current=n(i.value);save();render()})}
-function renderHistory(){let el=document.getElementById('history');if(!db.history.length){el.innerHTML='<div class="card empty">決済履歴はありません</div>';return}el.innerHTML=db.history.slice().reverse().map(t=>`<div class="card"><b>${t.name||t.symbol}</b><div class="sub">${t.symbol} · ${t.reason}</div><div class="row"><span>${t.qty}株　${fmt(t.entry)} → ${fmt(t.exit)}</span><b class="${t.pnl>=0?'up':'down'}">${t.pnl>=0?'+':''}${fmt(t.pnl)}</b></div></div>`).join('')}
-function renderStats(){let h=db.history,total=h.reduce((s,x)=>s+x.pnl,0),wins=h.filter(x=>x.pnl>0),loss=h.filter(x=>x.pnl<0),gp=wins.reduce((s,x)=>s+x.pnl,0),gl=Math.abs(loss.reduce((s,x)=>s+x.pnl,0)),pf=gl?gp/gl:gp?99:0,wr=h.length?wins.length/h.length*100:0;document.getElementById('stats').innerHTML=`<div class="card"><div class="grid"><div><div class="k">確定損益</div><div class="v ${total>=0?'up':'down'}">${total>=0?'+':''}${fmt(total)}</div></div><div><div class="k">勝率</div><div class="v">${wr.toFixed(1)}%</div></div><div><div class="k">Profit Factor</div><div class="v">${pf.toFixed(2)}</div></div><div><div class="k">完了トレード</div><div class="v">${h.length}</div></div></div></div>`}
-function addTrade(){let p={id:crypto.randomUUID(),market:market.value,symbol:symbol.value.trim().toUpperCase(),name:name.value.trim(),frame:frame.value,avg:n(price.value),qty:n(qty.value),stop:n(stop.value),target:n(target.value),lane:lane.value.trim(),regime:regime.value.trim(),thesis:thesis.value.trim(),invalid:invalid.value.trim(),opened:new Date().toISOString()};if(!p.symbol||p.avg<=0||p.qty<=0)return alert('銘柄コード・価格・数量を入力してください');db.positions.push(p);save();document.querySelector('[data-tab="positions"]').click()}
-window.exitTrade=(id,partial)=>{let p=db.positions.find(x=>x.id===id);let q=partial?n(prompt('決済数量',Math.max(1,Math.floor(p.qty/2)))):p.qty;if(!q||q>p.qty)return;let ep=n(prompt('EXIT価格',p.current||p.avg));if(!ep)return;let reason=prompt('EXIT理由','5日線終値割れ')||'未記入';db.history.push({id:crypto.randomUUID(),symbol:p.symbol,name:p.name,qty:q,entry:p.avg,exit:ep,pnl:(ep-p.avg)*q,reason,opened:p.opened,closed:new Date().toISOString(),lane:p.lane,regime:p.regime,frame:p.frame});p.qty-=q;if(p.qty<=0)db.positions=db.positions.filter(x=>x.id!==id);save();render()}
-function loadVantageCandidates(){
-  window.open('https://miyabom1-wq.github.io/cockpit/','_blank','noopener');
+const KEY='paper-trades-v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"positions":[],"history":[]}');
+const $=id=>document.getElementById(id);
+const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
+const n=x=>Number(x||0);
+const yen=x=>new Intl.NumberFormat('ja-JP',{maximumFractionDigits:2}).format(x);
+const when=()=>new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date());
+const shortDate=s=>{if(!s)return '-';const d=new Date(s);return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)};
+function persist(){save();renderAll();}
+
+function computeStats(){
+  const h=db.history||[];
+  const total=h.reduce((s,x)=>s+n(x.pnl),0);
+  const wins=h.filter(x=>n(x.pnl)>0);
+  const losses=h.filter(x=>n(x.pnl)<0);
+  const grossProfit=wins.reduce((s,x)=>s+n(x.pnl),0);
+  const grossLoss=Math.abs(losses.reduce((s,x)=>s+n(x.pnl),0));
+  const winRate=h.length?(wins.length/h.length*100):0;
+  const pf=grossLoss?grossProfit/grossLoss:(grossProfit?99:0);
+  return {total, winRate, pf, count:h.length};
 }
-window.pick=(s,nm)=>{symbol.value=s.replace('.T','');name.value=nm};
-function csv(){let rows=[['symbol','name','qty','entry','exit','pnl','reason','opened','closed'],...db.history.map(x=>[x.symbol,x.name,x.qty,x.entry,x.exit,x.pnl,x.reason,x.opened,x.closed])];let blob=new Blob(['\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='paper-history.csv';a.click()}
-let installPrompt=null;
-const installButton=document.getElementById('installApp');
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();installPrompt=e;installButton.textContent='インストール';
-});
-installButton.onclick=async()=>{
-  if(!installPrompt){alert('Chromeの通常タブで開き、右上の︙から「アプリをインストール」または「ホーム画面に追加」を選択してください。既にインストール済みの場合は、このボタンではなくPAPERアイコンから起動します。');return;}
-  installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installButton.style.display='none';
-};
-window.addEventListener('appinstalled',()=>{installButton.textContent='インストール済み'});
+function computeOpenStats(){
+  const p=db.positions||[];
+  const totalQty=p.reduce((s,x)=>s+n(x.qty),0);
+  const totalPnl=p.reduce((s,x)=>s+((n(x.current||x.avg)-n(x.avg))*n(x.qty)),0);
+  const cost=p.reduce((s,x)=>s+n(x.avg)*n(x.qty),0);
+  const rate=cost?(totalPnl/cost*100):0;
+  return {totalQty,totalPnl,rate,count:p.length};
+}
+function rrValue(p){
+  const risk=Math.max(0.0001,n(p.avg)-n(p.stop));
+  const reward=Math.max(0,n(p.target)-n(p.avg));
+  return reward/risk;
+}
+function iconText(p){
+  const s=(p.symbol||'').replace('.T','').toUpperCase();
+  if(s) return s.slice(0,4);
+  const nm=(p.name||'PAPER').replace(/\s+/g,'');
+  return nm.slice(0,4).toUpperCase();
+}
+function setActiveTab(tab){
+  document.querySelectorAll('[data-tab]').forEach(el=>{
+    el.classList.toggle('active',el.dataset.tab===tab);
+  });
+  document.querySelectorAll('.panel').forEach(el=>{
+    el.classList.toggle('active',el.id===tab);
+  });
+}
+function bindTabs(){
+  document.querySelectorAll('#topTabs [data-tab], #bottomTabs [data-tab]').forEach(btn=>{
+    btn.onclick=()=>setActiveTab(btn.dataset.tab);
+  });
+}
+function renderSummary(){
+  const s=computeStats();
+  return `
+    <div class="card summary">
+      <div class="cell"><div class="k">確定損益</div><div class="v ${s.total>=0?'good':'bad'}">${s.total>=0?'+':''}${yen(s.total)}円</div></div>
+      <div class="cell"><div class="k">勝率</div><div class="v">${s.winRate.toFixed(1)}%</div></div>
+      <div class="cell"><div class="k">Profit Factor</div><div class="v">${s.pf.toFixed(2)}</div></div>
+      <div class="cell"><div class="k">完了トレード</div><div class="v">${s.count}</div></div>
+    </div>
+    <div class="inline-meta">
+      <div>更新日時：${when()}</div>
+      <button class="refresh" id="refreshBtn">↻ 更新</button>
+    </div>
+  `;
+}
+function renderPositions(){
+  const el=$('positions');
+  const open=computeOpenStats();
+  let html=renderSummary();
+  html+=`<div class="section-head"><div class="section-title">建玉一覧</div><div class="count">${db.positions.length}件</div></div>`;
+  if(!db.positions.length){
+    html+=`<div class="card empty">建玉はありません。ENTRYタブから登録してください。</div>`;
+  }else{
+    db.positions.forEach((p,idx)=>{
+      const cur=n(p.current||p.avg);
+      const pnl=(cur-n(p.avg))*n(p.qty);
+      const rate=n(p.avg)?((cur/n(p.avg)-1)*100):0;
+      const rr=rrValue(p);
+      const rrFill=Math.max(8,Math.min(100,rr*40));
+      html+=`
+        <div class="card position">
+          <div class="pos-top">
+            <div class="pos-title-wrap">
+              <div class="badge-coin">${iconText(p)}</div>
+              <div>
+                <div class="pos-name">${p.name||p.symbol}</div>
+                <div class="pos-sub">${p.symbol||'-'} / ${p.market==='us'?'米国株':'日本株'} / ${p.frame||'READY'}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="side-pill">買い</div>
+              <div class="menu-dot">⋮</div>
+            </div>
+          </div>
+
+          <div class="grid4">
+            <div class="metric"><div class="k">建玉数量</div><div class="mv">${yen(n(p.qty))} 株</div></div>
+            <div class="metric"><div class="k">平均価格</div><div class="mv">${yen(n(p.avg))} 円</div></div>
+            <div class="metric"><div class="k">現在値</div><div class="mv"><input data-id="${p.id}" class="curInput" type="number" step="any" value="${cur}" style="width:100%;border:1px solid var(--line);border-radius:14px;padding:10px 12px"></div></div>
+            <div class="metric"><div class="k">評価損益</div><div class="mv ${pnl>=0?'good':'bad'}">${pnl>=0?'+':''}${yen(pnl)} 円<br><span style="font-size:13px">${rate>=0?'+':''}${rate.toFixed(2)}%</span></div></div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="grid3">
+            <div class="metric"><div class="k">建玉日時</div><div class="mv" style="font-size:15px">${shortDate(p.opened)}</div></div>
+            <div class="metric"><div class="k">ストップロス</div><div class="mv" style="font-size:15px">${yen(n(p.stop))} 円</div></div>
+            <div class="metric"><div class="k">ターゲット</div><div class="mv" style="font-size:15px">${yen(n(p.target))} 円</div></div>
+          </div>
+
+          <div class="rr-row">
+            <div class="k" style="margin:0">リスク / リワード</div>
+            <div class="rr-bar"><div class="rr-fill" style="width:${rrFill}%"></div></div>
+            <div class="mv" style="font-size:14px">1 : ${rr.toFixed(2)}</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-outline" onclick="exitTrade('${p.id}', true)">一部EXIT</button>
+            <button class="btn btn-fill" onclick="exitTrade('${p.id}', false)">全EXIT</button>
+          </div>
+        </div>
+      `;
+    });
+    html+=`
+      <div class="card totalbar">
+        <div class="donut"></div>
+        <div class="totalitem"><div class="k">総ポジション</div><div class="mv">${yen(open.totalQty)} 株</div></div>
+        <div class="totalitem"><div class="k">評価損益</div><div class="mv ${open.totalPnl>=0?'good':'bad'}">${open.totalPnl>=0?'+':''}${yen(open.totalPnl)} 円</div></div>
+        <div class="totalitem"><div class="k">含み損益率</div><div class="mv ${open.rate>=0?'good':'bad'}">${open.rate>=0?'+':''}${open.rate.toFixed(2)}%</div></div>
+        <div class="chev">›</div>
+      </div>
+    `;
+  }
+  el.innerHTML=html;
+  $('refreshBtn')?.addEventListener('click',()=>renderAll());
+  document.querySelectorAll('.curInput').forEach(inp=>{
+    inp.onchange=()=>{
+      const p=db.positions.find(x=>x.id===inp.dataset.id);
+      if(!p) return;
+      p.current=n(inp.value);
+      save();
+      renderAll();
+    }
+  });
+}
+function renderHistory(){
+  const el=$('history');
+  let html=renderSummary();
+  html+=`<div class="section-head"><div class="section-title">決済履歴</div><div class="count">${db.history.length}件</div></div>`;
+  if(!db.history.length){
+    html+=`<div class="card empty">決済履歴はありません。</div>`;
+  }else{
+    db.history.slice().reverse().forEach(t=>{
+      html+=`
+        <div class="card h-card">
+          <div class="rowline">
+            <div>
+              <div style="font-weight:800;font-size:18px">${t.name||t.symbol}</div>
+              <div class="pos-sub">${t.symbol||'-'} / ${t.reason||'未記入'}</div>
+            </div>
+            <div class="h-pnl ${n(t.pnl)>=0?'good':'bad'}">${n(t.pnl)>=0?'+':''}${yen(n(t.pnl))} 円</div>
+          </div>
+          <div class="hr" style="margin:14px 0"></div>
+          <div class="grid2" style="margin-top:0">
+            <div class="metric"><div class="k">約定</div><div class="mv" style="font-size:15px">${yen(n(t.entry))} → ${yen(n(t.exit))}</div></div>
+            <div class="metric"><div class="k">数量 / 日時</div><div class="mv" style="font-size:15px">${yen(n(t.qty))} 株 / ${shortDate(t.closed)}</div></div>
+          </div>
+        </div>
+      `;
+    });
+  }
+  el.innerHTML=html;
+  $('refreshBtn')?.addEventListener('click',()=>renderAll());
+}
+function renderStats(){
+  const el=$('stats');
+  const s=computeStats(), open=computeOpenStats();
+  let html=renderSummary();
+  html+=`
+    <div class="stats-grid">
+      <div class="card stats-card"><div class="subk">確定損益</div><div class="big ${s.total>=0?'good':'bad'}">${s.total>=0?'+':''}${yen(s.total)}円</div></div>
+      <div class="card stats-card"><div class="subk">勝率</div><div class="big">${s.winRate.toFixed(1)}%</div></div>
+      <div class="card stats-card"><div class="subk">Profit Factor</div><div class="big">${s.pf.toFixed(2)}</div></div>
+      <div class="card stats-card"><div class="subk">保有ポジション</div><div class="big">${open.count}</div></div>
+    </div>
+    <div class="section-head"><div class="section-title">サマリー</div></div>
+    <div class="card pad">
+      <div class="grid2" style="margin-top:0">
+        <div class="metric"><div class="k">総ポジション数量</div><div class="mv">${yen(open.totalQty)} 株</div></div>
+        <div class="metric"><div class="k">含み損益</div><div class="mv ${open.totalPnl>=0?'good':'bad'}">${open.totalPnl>=0?'+':''}${yen(open.totalPnl)} 円</div></div>
+        <div class="metric"><div class="k">含み損益率</div><div class="mv ${open.rate>=0?'good':'bad'}">${open.rate>=0?'+':''}${open.rate.toFixed(2)}%</div></div>
+        <div class="metric"><div class="k">完了トレード数</div><div class="mv">${s.count}</div></div>
+      </div>
+    </div>
+  `;
+  el.innerHTML=html;
+  $('refreshBtn')?.addEventListener('click',()=>renderAll());
+}
+function renderAll(){
+  renderPositions();
+  renderHistory();
+  renderStats();
+  bindTabs();
+}
+function addTrade(){
+  const p={
+    id:crypto.randomUUID(),
+    market:$('market').value,
+    symbol:$('symbol').value.trim().toUpperCase(),
+    name:$('name').value.trim(),
+    frame:$('frame').value,
+    avg:n($('price').value),
+    qty:n($('qty').value),
+    stop:n($('stop').value),
+    target:n($('target').value),
+    lane:$('lane').value.trim(),
+    regime:$('regime').value.trim(),
+    thesis:$('thesis').value.trim(),
+    invalid:$('invalid').value.trim(),
+    opened:new Date().toISOString()
+  };
+  if(!p.symbol || p.avg<=0 || p.qty<=0){
+    alert('銘柄コード・約定価格・数量を入力してください。');
+    return;
+  }
+  db.positions.push(p);
+  save();
+  setActiveTab('positions');
+  renderAll();
+}
+window.exitTrade=(id,partial)=>{
+  const p=db.positions.find(x=>x.id===id);
+  if(!p) return;
+  const defaultQty=partial?Math.max(1,Math.floor(n(p.qty)/2)):n(p.qty);
+  const qty=n(prompt('決済数量',defaultQty));
+  if(!qty || qty>n(p.qty)) return;
+  const ep=n(prompt('EXIT価格',n(p.current||p.avg)));
+  if(!ep) return;
+  const reason=prompt('EXIT理由','5日線終値割れ')||'未記入';
+  db.history.push({
+    id:crypto.randomUUID(),
+    symbol:p.symbol,name:p.name,qty,entry:n(p.avg),exit:ep,
+    pnl:(ep-n(p.avg))*qty,reason,opened:p.opened,closed:new Date().toISOString(),
+    lane:p.lane,regime:p.regime,frame:p.frame
+  });
+  p.qty=n(p.qty)-qty;
+  if(p.qty<=0){
+    db.positions=db.positions.filter(x=>x.id!==id);
+  }
+  persist();
+}
+function csv(){
+  const rows=[['symbol','name','qty','entry','exit','pnl','reason','opened','closed'],...(db.history||[]).map(x=>[x.symbol,x.name,x.qty,x.entry,x.exit,x.pnl,x.reason,x.opened,x.closed])];
+  const csvData='\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+  const blob=new Blob([csvData],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='paper-history.csv';
+  a.click();
+}
+function openVantage(){ window.open('https://miyabom1-wq.github.io/cockpit/','_blank','noopener'); }
+
+$('add').onclick=addTrade;
+$('backup').onclick=csv;
+$('openVantage').onclick=openVantage;
+
 const qp=new URLSearchParams(location.search);
 if(qp.get('symbol')){
-  symbol.value=qp.get('symbol')||'';
-  name.value=qp.get('name')||'';
-  frame.value=qp.get('frame')||'READY';
-  lane.value=qp.get('lane')||'';
-  regime.value=qp.get('regime')||'';
-  document.querySelector('[data-tab="entry"]').click();
+  $('symbol').value=qp.get('symbol')||'';
+  $('name').value=qp.get('name')||'';
+  $('frame').value=qp.get('frame')||'READY';
+  $('lane').value=qp.get('lane')||'';
+  $('regime').value=qp.get('regime')||'';
+  setActiveTab('entry');
 }
-tabs();add.onclick=addTrade;loadVantage.onclick=loadVantageCandidates;backup.onclick=csv;render();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./'});
-</script></body></html>
+renderAll();
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js',{scope:'./'});
+}
+</script>
+</body>
+</html>
