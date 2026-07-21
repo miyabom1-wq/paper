@@ -1,0 +1,31 @@
+{
+  "id": "/paper/",
+  "name": "PAPER - VANTAGE Demo Trading",
+  "short_name": "PAPER",
+  "description": "FRAMEからENTRY・EXITまでを検証するデモトレード管理アプリ",
+  "start_url": "/paper/",
+  "scope": "/paper/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#eef1f5",
+  "theme_color": "#111827",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
