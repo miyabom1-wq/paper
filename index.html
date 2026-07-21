@@ -36,7 +36,7 @@ window.exitTrade=(id,partial)=>{let p=db.positions.find(x=>x.id===id);let q=part
 function loadVantageCandidates(){
   window.open('https://miyabom1-wq.github.io/cockpit/','_blank','noopener');
 }
-window.pick=(s,nm)=>{symbol.value=s.replace('.T','');name.value=nm};name.value=nm};
+window.pick=(s,nm)=>{symbol.value=s.replace('.T','');name.value=nm};
 function csv(){let rows=[['symbol','name','qty','entry','exit','pnl','reason','opened','closed'],...db.history.map(x=>[x.symbol,x.name,x.qty,x.entry,x.exit,x.pnl,x.reason,x.opened,x.closed])];let blob=new Blob(['\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='paper-history.csv';a.click()}
 let installPrompt=null;
 const installButton=document.getElementById('installApp');
