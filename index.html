@@ -133,6 +133,12 @@ a{text-decoration:none;color:inherit}
   .actions{grid-template-columns:1fr}
   .summary .cell{padding:16px 14px}
 }
+
+/* FRAME → PAPER entry flow v3 */
+.handoff{margin-bottom:14px;padding:16px 17px;border-radius:20px;background:linear-gradient(135deg,#fff8e8,#fffdf8);border:1px solid #ecd7a8;box-shadow:var(--shadow)}
+.handoff.hidden{display:none}.handoff-head{display:flex;align-items:center;gap:10px}.handoff-mark{width:38px;height:38px;border-radius:12px;background:#172033;color:#79a5ff;display:grid;place-items:center;font-weight:900}.handoff-title{font-weight:900}.handoff-sub{font-size:12px;color:var(--muted);margin-top:2px}.handoff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.handoff-grid div{background:#fff;border:1px solid var(--line2);border-radius:13px;padding:9px 10px}.handoff-grid span{display:block;font-size:10px;color:var(--muted)}.handoff-grid b{font-size:13px}.compact-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fullrow{grid-column:1/-1}.form-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}.form-section:first-of-type{margin-top:0;padding-top:0;border-top:none}.form-section-title{font-size:12px;font-weight:900;color:#5f5a52;letter-spacing:.04em;margin:0 0 10px}.chipset{display:flex;gap:7px;flex-wrap:wrap}.chipbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:750;color:#625f59}.chipbtn.active{background:var(--accentBg);border-color:#e4bd69;color:#a76000}.sizing-box{background:var(--card2);border:1px solid var(--line2);border-radius:18px;padding:14px}.auto-note{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.55}.trade-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:#171c29;color:#fff;border-radius:20px;overflow:hidden;margin-top:16px}.trade-preview .pv{padding:15px 13px;border-right:1px solid #ffffff1a}.trade-preview .pv:last-child{border-right:none}.trade-preview span{display:block;font-size:10px;color:#aeb6c7;margin-bottom:5px}.trade-preview b{font-size:16px}.trade-preview .accent{color:#ffc95b}.advanced{margin-top:14px;border:1px solid var(--line2);border-radius:18px;background:#fff}.advanced summary{cursor:pointer;padding:14px 16px;font-weight:800;color:#625f59}.advanced-body{padding:0 16px 16px}.source-badge{display:inline-flex;align-items:center;gap:5px;background:#e8eefb;color:#315eae;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:850}.readonly-like{background:#f7f3eb!important;color:#716b62}.quick-link-row{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}.quick-link{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;font-weight:750;color:#54514b}.inline-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hidden-field{display:none!important}
+@media(max-width:620px){.compact-form,.inline-two{grid-template-columns:1fr}.handoff-grid,.trade-preview{grid-template-columns:repeat(2,1fr)}.trade-preview .pv:nth-child(2){border-right:none}.trade-preview .pv:nth-child(-n+2){border-bottom:1px solid #ffffff1a}.fullrow{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -164,32 +170,93 @@ a{text-decoration:none;color:inherit}
   <section id="positions" class="panel active"></section>
 
   <section id="entry" class="panel">
+    <div id="frameHandoff" class="handoff hidden">
+      <div class="handoff-head">
+        <div class="handoff-mark">F</div>
+        <div><div class="handoff-title">FRAMEから入力済み</div><div class="handoff-sub">価格・撤回水準・根拠を引き継ぎました。数量だけ確認すれば登録できます。</div></div>
+      </div>
+      <div class="handoff-grid">
+        <div><span>セットアップ</span><b id="handoffType">—</b></div>
+        <div><span>FRAME判定</span><b id="handoffState">—</b></div>
+        <div><span>局面</span><b id="handoffPhase">—</b></div>
+        <div><span>テーマ</span><b id="handoffTheme">—</b></div>
+      </div>
+    </div>
+
     <div class="card entry-card">
-      <div class="section-head" style="margin:0 0 10px">
-        <div class="section-title">仮想エントリー</div>
-        <div class="count">内容はローカル保存</div>
+      <div class="section-head" style="margin:0 0 14px">
+        <div><div class="section-title">デモエントリー</div><div class="pos-sub">FRAME経由なら自動入力。単独入力も選択中心です。</div></div>
+        <span id="entrySource" class="source-badge">手動</span>
       </div>
 
-      <div class="formgrid">
-        <div class="field"><label>市場</label><select id="market"><option value="jp">日本株</option><option value="us">米国株</option></select></div>
-        <div class="field"><label>FRAME状態</label><select id="frame"><option>READY</option><option>TRIGGERED</option><option>WAIT</option></select></div>
-        <div class="field"><label>銘柄コード</label><input id="symbol" placeholder="285A / MU"></div>
-        <div class="field"><label>銘柄名</label><input id="name" placeholder="キオクシア"></div>
-        <div class="field"><label>約定価格</label><input id="price" type="number" step="any"></div>
-        <div class="field"><label>数量</label><input id="qty" type="number" step="any"></div>
-        <div class="field"><label>損切価格</label><input id="stop" type="number" step="any"></div>
-        <div class="field"><label>目標価格</label><input id="target" type="number" step="any"></div>
-        <div class="field"><label>VANTAGE判定</label><input id="lane" placeholder="B・反転初動"></div>
-        <div class="field"><label>地合い</label><input id="regime" placeholder="通常 / 弱い"></div>
-        <div class="field span2"><label>エントリー根拠</label><textarea id="thesis" placeholder="出来高、RS、押し目、再加速条件など"></textarea></div>
-        <div class="field span2"><label>無効化条件</label><textarea id="invalid" placeholder="終値で5日線割れ、前日安値割れなど"></textarea></div>
+      <div class="form-section">
+        <div class="form-section-title">1. 銘柄・セットアップ</div>
+        <div class="compact-form">
+          <div class="field fullrow"><label>過去に使った銘柄</label><select id="symbolPreset"><option value="">新しい銘柄を入力</option></select></div>
+          <div class="field"><label>市場</label><select id="market"><option value="jp">日本株</option><option value="us">米国株</option></select></div>
+          <div class="field"><label>エントリー段階</label><select id="entryType"><option value="probe">打診</option><option value="standard" selected>標準</option><option value="add">追加</option><option value="discretionary">裁量</option></select></div>
+          <div class="field"><label>銘柄コード</label><input id="symbol" placeholder="285A / MU" autocomplete="off"></div>
+          <div class="field"><label>銘柄名</label><input id="name" placeholder="キオクシア"></div>
+          <div class="field"><label>FRAME状態</label><select id="frame"><option>TRIGGERED</option><option selected>READY</option><option>WAIT</option><option>INVALID</option></select></div>
+          <div class="field"><label>約定価格</label><input id="price" type="number" step="any" inputmode="decimal"></div>
+        </div>
       </div>
 
-      <button class="primarywide" id="add">エントリー登録</button>
+      <div class="form-section">
+        <div class="form-section-title">2. 数量を自動計算</div>
+        <div class="sizing-box">
+          <div class="compact-form">
+            <div class="field"><label>数量の決め方</label><select id="sizeMode"><option value="risk">許容損失から計算</option><option value="amount" selected>投資額から計算</option><option value="qty">数量を直接入力</option></select></div>
+            <div class="field" id="amountWrap"><label>想定投資額</label><select id="amountPreset"></select></div>
+            <div class="field hidden-field" id="riskWrap"><label>許容損失</label><select id="riskPreset"></select></div>
+            <div class="field"><label>数量</label><input id="qty" type="number" step="any" inputmode="numeric"></div>
+          </div>
+          <div id="sizeNote" class="auto-note">約定価格を入れると数量を自動計算します。</div>
+          <div class="chipset" style="margin-top:10px"><button type="button" class="chipbtn qtyQuick" data-jp="100" data-us="10">小</button><button type="button" class="chipbtn qtyQuick" data-jp="200" data-us="25">中</button><button type="button" class="chipbtn qtyQuick" data-jp="300" data-us="50">大</button><button type="button" class="chipbtn qtyQuick" data-jp="500" data-us="100">最大</button></div>
+        </div>
+      </div>
 
-      <div class="helper-row">
-        <button class="ghost" id="openVantage">VANTAGEを開く</button>
-        <button class="ghost" id="backup">CSV出力</button>
+      <div class="form-section">
+        <div class="form-section-title">3. 損切り・利確</div>
+        <div class="compact-form">
+          <div class="field"><label>損切り方式</label><select id="stopMode"><option value="frame" selected>FRAME水準</option><option value="pct2">約定価格 −2%</option><option value="pct3">約定価格 −3%</option><option value="pct5">約定価格 −5%</option><option value="custom">価格を指定</option></select></div>
+          <div class="field"><label>損切価格</label><input id="stop" type="number" step="any" inputmode="decimal"></div>
+          <div class="field"><label>利確方式</label><select id="targetMode"><option value="frame" selected>FRAME次段階</option><option value="r15">1.5R</option><option value="r2">2R</option><option value="r3">3R</option><option value="custom">価格を指定</option></select></div>
+          <div class="field"><label>目標価格</label><input id="target" type="number" step="any" inputmode="decimal"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">4. 分類はプルダウンで選択</div>
+        <div class="compact-form">
+          <div class="field"><label>VANTAGE候補</label><select id="lane"><option value="">未設定</option><option value="A">A・強い継続</option><option value="B">B・反転初動</option><option value="C">C・押し目候補</option><option value="D">D・監視</option><option value="E">E・回避</option></select></div>
+          <div class="field"><label>市場地合い</label><select id="regime"><option value="">未設定</option><option>世界リスクオフ</option><option>弱い</option><option selected>通常</option><option>強い</option></select></div>
+          <div class="field"><label>主なエントリー根拠</label><select id="reasonPreset"><option>FRAME条件成立</option><option>VANTAGE候補</option><option>反転初動</option><option>押し目</option><option>再加速</option><option>高値突破</option><option>裁量</option></select></div>
+          <div class="field"><label>主な無効化条件</label><select id="invalidPreset"><option>FRAME無効化</option><option>損切価格割れ</option><option>5日線終値割れ</option><option>前日安値割れ</option><option>20日線終値割れ</option><option>その他</option></select></div>
+        </div>
+      </div>
+
+      <details class="advanced">
+        <summary>詳細メモ（必要なときだけ）</summary>
+        <div class="advanced-body compact-form">
+          <div class="field fullrow"><label>エントリー根拠</label><textarea id="thesis" placeholder="FRAMEから自動入力されます"></textarea></div>
+          <div class="field fullrow"><label>無効化条件</label><textarea id="invalid" placeholder="FRAMEから自動入力されます"></textarea></div>
+        </div>
+      </details>
+
+      <div class="trade-preview">
+        <div class="pv"><span>投資額</span><b id="previewAmount">—</b></div>
+        <div class="pv"><span>最大損失</span><b id="previewRisk">—</b></div>
+        <div class="pv"><span>R/R</span><b id="previewRR">—</b></div>
+        <div class="pv"><span>目標損益</span><b id="previewReward" class="accent">—</b></div>
+      </div>
+
+      <button class="primarywide" id="add">この内容でデモエントリー</button>
+
+      <div class="quick-link-row">
+        <button class="quick-link" id="openFrame">FRAMEを開く</button>
+        <button class="quick-link" id="openVantage">VANTAGEを開く</button>
+        <button class="quick-link" id="backup">CSV出力</button>
       </div>
     </div>
   </section>
@@ -417,28 +484,33 @@ function renderAll(){
   bindTabs();
 }
 function addTrade(){
+  syncPresetsToMemo();
   const p={
     id:crypto.randomUUID(),
     market:$('market').value,
     symbol:$('symbol').value.trim().toUpperCase(),
     name:$('name').value.trim(),
     frame:$('frame').value,
+    entry_type:$('entryType').value,
     avg:n($('price').value),
     qty:n($('qty').value),
     stop:n($('stop').value),
     target:n($('target').value),
-    lane:$('lane').value.trim(),
-    regime:$('regime').value.trim(),
+    lane:$('lane').value,
+    regime:$('regime').value,
     thesis:$('thesis').value.trim(),
     invalid:$('invalid').value.trim(),
+    source:entryContext.source||'manual',
+    source_context:entryContext,
     opened:new Date().toISOString()
   };
-  if(!p.symbol || p.avg<=0 || p.qty<=0){
-    alert('銘柄コード・約定価格・数量を入力してください。');
-    return;
-  }
+  if(!p.symbol || p.avg<=0 || p.qty<=0){alert('銘柄・約定価格・数量を確認してください。');return;}
+  if(p.stop<=0 || p.stop>=p.avg){alert('損切価格は約定価格より下に設定してください。');return;}
+  if(p.target<=p.avg){alert('目標価格は約定価格より上に設定してください。');return;}
   db.positions.push(p);
   save();
+  rememberEntrySymbol(p);
+  clearEntryForm(false);
   setActiveTab('positions');
   renderAll();
 }
@@ -472,20 +544,48 @@ function csv(){
   a.download='paper-history.csv';
   a.click();
 }
-function openVantage(){ window.open('https://miyabom1-wq.github.io/cockpit/','_blank','noopener'); }
+const FRAME_URL='https://miyabom1-wq.github.io/frame/';
+function openVantage(){window.open('https://miyabom1-wq.github.io/cockpit/','_blank','noopener')}
+function openFrame(){window.open(FRAME_URL,'_blank','noopener')}
 
-$('add').onclick=addTrade;
-$('backup').onclick=csv;
-$('openVantage').onclick=openVantage;
+const entryContext={source:null,frame_stop:null,frame_target:null,phase:'',theme:'',setup:''};
+const ENTRY_TYPE_LABEL={probe:'打診',standard:'標準',add:'追加',discretionary:'裁量'};
+const money=v=>{if(!Number.isFinite(Number(v)))return'—';return $('market')?.value==='us'?'$'+Number(v).toLocaleString('ja-JP',{maximumFractionDigits:2}):Math.round(Number(v)).toLocaleString('ja-JP')+'円'};
+function recentEntrySymbols(){
+  const map=new Map();
+  [...(db.positions||[]),...(db.history||[])].forEach(x=>{if(!x?.symbol)return;const key=(x.market||'jp')+'|'+x.symbol;map.set(key,{market:x.market||'jp',symbol:x.symbol,name:x.name||x.symbol})});
+  try{(JSON.parse(localStorage.getItem('paper-recent-symbols')||'[]')||[]).forEach(x=>map.set((x.market||'jp')+'|'+x.symbol,x))}catch{}
+  return [...map.values()].slice(0,20);
+}
+function rememberEntrySymbol(p){const list=[{market:p.market,symbol:p.symbol,name:p.name||p.symbol},...recentEntrySymbols().filter(x=>!(x.market===p.market&&x.symbol===p.symbol))].slice(0,20);localStorage.setItem('paper-recent-symbols',JSON.stringify(list));renderSymbolPresets()}
+function renderSymbolPresets(){const sel=$('symbolPreset');if(!sel)return;const cur=sel.value;sel.innerHTML='<option value="">新しい銘柄を入力</option>'+recentEntrySymbols().map((x,i)=>`<option value="${i}">${x.market==='jp'?'🇯🇵':'🇺🇸'} ${x.name} (${x.symbol})</option>`).join('');if([...sel.options].some(o=>o.value===cur))sel.value=cur}
+function setSelectValue(id,value,fallback=''){const el=$(id);if(!el)return;const v=String(value??'');const opt=[...el.options].find(o=>o.value===v||o.text===v||o.text.startsWith(v+'・'));el.value=opt?opt.value:fallback}
+function roundQty(raw,market){if(!(raw>0))return 0;if(market==='jp'){const lot=100;return Math.max(lot,Math.floor(raw/lot)*lot)}return Math.max(1,Math.floor(raw))}
+function renderSizingPresets(){const us=$('market').value==='us',a=$('amountPreset'),r=$('riskPreset'),av=a.value,rv=r.value;a.innerHTML=(us?[[5000,'$5,000'],[10000,'$10,000'],[25000,'$25,000'],[50000,'$50,000'],[100000,'$100,000']]:[[1000000,'100万円'],[3000000,'300万円'],[5000000,'500万円'],[10000000,'1,000万円'],[15000000,'1,500万円'],[30000000,'3,000万円']]).map((x,i)=>`<option value="${x[0]}" ${i===1?'selected':''}>${x[1]}</option>`).join('');r.innerHTML=(us?[[100,'$100'],[300,'$300'],[500,'$500'],[1000,'$1,000'],[2000,'$2,000']]:[[10000,'1万円'],[30000,'3万円'],[50000,'5万円'],[100000,'10万円'],[200000,'20万円']]).map((x,i)=>`<option value="${x[0]}" ${i===2?'selected':''}>${x[1]}</option>`).join('');if([...a.options].some(o=>o.value===av))a.value=av;if([...r.options].some(o=>o.value===rv))r.value=rv}
+function applySizeMode(){const mode=$('sizeMode').value;$('amountWrap').classList.toggle('hidden-field',mode!=='amount');$('riskWrap').classList.toggle('hidden-field',mode!=='risk');$('qty').readOnly=mode!=='qty';$('qty').classList.toggle('readonly-like',mode!=='qty');recalcQty()}
+function recalcQty(){const mode=$('sizeMode').value,price=n($('price').value),stop=n($('stop').value),market=$('market').value;let qty=n($('qty').value);if(mode==='amount'&&price>0)qty=roundQty(n($('amountPreset').value)/price,market);if(mode==='risk'&&price>stop&&stop>0)qty=roundQty(n($('riskPreset').value)/(price-stop),market);if(mode!=='qty')$('qty').value=qty||'';const text=mode==='amount'?'想定投資額から自動計算':mode==='risk'?'1トレードの許容損失から自動計算':'数量を直接指定';const actual=price>0&&qty>0?money(price*qty):'—';$('sizeNote').textContent=`${text} · ${market==='jp'?'100株単位':'1株単位'} · 実際 ${actual}`;updatePreview()}
+function applyStopMode(){const mode=$('stopMode').value,price=n($('price').value);let stop=n($('stop').value);if(mode==='frame'&&entryContext.frame_stop>0)stop=entryContext.frame_stop;if(mode==='pct2'&&price>0)stop=price*.98;if(mode==='pct3'&&price>0)stop=price*.97;if(mode==='pct5'&&price>0)stop=price*.95;if(mode!=='custom'&&stop>0)$('stop').value=stop.toFixed($('market').value==='jp'?0:2);$('stop').readOnly=mode!=='custom'&&!(mode==='frame'&&!entryContext.frame_stop);$('stop').classList.toggle('readonly-like',$('stop').readOnly);applyTargetMode();recalcQty()}
+function applyTargetMode(){const mode=$('targetMode').value,price=n($('price').value),stop=n($('stop').value),risk=price-stop;let target=n($('target').value);if(mode==='frame'&&entryContext.frame_target>price)target=entryContext.frame_target;if(mode==='r15'&&risk>0)target=price+risk*1.5;if(mode==='r2'&&risk>0)target=price+risk*2;if(mode==='r3'&&risk>0)target=price+risk*3;if(mode!=='custom'&&target>0)$('target').value=target.toFixed($('market').value==='jp'?0:2);$('target').readOnly=mode!=='custom'&&!(mode==='frame'&&!(entryContext.frame_target>price));$('target').classList.toggle('readonly-like',$('target').readOnly);updatePreview()}
+function syncPresetsToMemo(){const reason=$('reasonPreset').value,invalidPreset=$('invalidPreset').value;if(!$('thesis').value.trim())$('thesis').value=reason;if(!$('invalid').value.trim())$('invalid').value=invalidPreset==='FRAME無効化'?(entryContext.invalidation||'FRAME条件の無効化'):invalidPreset}
+function updatePreview(){const price=n($('price').value),qty=n($('qty').value),stop=n($('stop').value),target=n($('target').value),risk=Math.max(0,(price-stop)*qty),reward=Math.max(0,(target-price)*qty),rr=risk>0?reward/risk:0;$('previewAmount').textContent=price>0&&qty>0?money(price*qty):'—';$('previewRisk').textContent=risk>0?money(risk):'—';$('previewRR').textContent=rr>0?'1 : '+rr.toFixed(2):'—';$('previewReward').textContent=reward>0?'+'+money(reward):'—'}
+function renderHandoff(){const box=$('frameHandoff'),isFrame=entryContext.source==='frame';box.classList.toggle('hidden',!isFrame);$('entrySource').textContent=isFrame?'FRAME引継ぎ':'手動';$('handoffType').textContent=ENTRY_TYPE_LABEL[$('entryType').value]||'—';$('handoffState').textContent=$('frame').value||'—';$('handoffPhase').textContent=entryContext.phase||'—';$('handoffTheme').textContent=entryContext.theme||'—'}
+function applyFrameQuery(){const q=new URLSearchParams(location.search);if(q.get('source')!=='frame'||!q.get('symbol'))return false;entryContext.source='frame';entryContext.frame_stop=n(q.get('stop'));entryContext.frame_target=n(q.get('target'));entryContext.phase=q.get('phase')||'';entryContext.theme=q.get('theme')||'';entryContext.setup=q.get('setup')||'';entryContext.invalidation=q.get('invalid')||'';$('market').value=q.get('market')==='us'?'us':'jp';$('symbol').value=q.get('symbol')||'';$('name').value=q.get('name')||'';setSelectValue('entryType',q.get('entry_type'),'standard');setSelectValue('frame',q.get('frame'),'READY');$('price').value=q.get('price')||'';$('stop').value=q.get('stop')||'';$('target').value=q.get('target')||'';setSelectValue('lane',q.get('lane'),'');setSelectValue('regime',q.get('regime'),'');$('thesis').value=q.get('thesis')||q.get('setup')||'';$('invalid').value=q.get('invalid')||'';$('reasonPreset').value='FRAME条件成立';$('invalidPreset').value='FRAME無効化';$('stopMode').value=entryContext.frame_stop>0?'frame':'pct3';$('targetMode').value=entryContext.frame_target>n($('price').value)?'frame':'r2';$('sizeMode').value='amount';renderHandoff();applyStopMode();applySizeMode();setActiveTab('entry');history.replaceState(null,'',location.pathname+'?source=frame&loaded=1');return true}
+function clearEntryForm(keepSymbol=true){entryContext.source=null;entryContext.frame_stop=null;entryContext.frame_target=null;entryContext.phase='';entryContext.theme='';entryContext.setup='';entryContext.invalidation='';if(!keepSymbol){$('symbol').value='';$('name').value=''}$('price').value='';$('qty').value='';$('stop').value='';$('target').value='';$('thesis').value='';$('invalid').value='';$('entryType').value='standard';$('frame').value='READY';$('stopMode').value='pct3';$('targetMode').value='r2';renderHandoff();applyStopMode();applySizeMode()}
+function bindEntryForm(){
+  renderSymbolPresets();renderSizingPresets();
+  $('symbolPreset').onchange=()=>{const x=recentEntrySymbols()[Number($('symbolPreset').value)];if(!x)return;$('market').value=x.market;$('symbol').value=x.symbol;$('name').value=x.name;applySizeMode()};
+  $('sizeMode').onchange=applySizeMode;$('amountPreset').onchange=recalcQty;$('riskPreset').onchange=recalcQty;$('stopMode').onchange=applyStopMode;$('targetMode').onchange=applyTargetMode;
+  ['price','qty','stop','target'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='price')applyStopMode();else if(id==='stop')applyTargetMode();else updatePreview()}));
+  $('market').onchange=()=>{renderSizingPresets();recalcQty();applyStopMode()};$('entryType').onchange=renderHandoff;$('frame').onchange=renderHandoff;
+  document.querySelectorAll('.qtyQuick').forEach(b=>b.onclick=()=>{$('sizeMode').value='qty';applySizeMode();$('qty').value=$('market').value==='jp'?b.dataset.jp:b.dataset.us;updatePreview()});
+}
 
-const qp=new URLSearchParams(location.search);
-if(qp.get('symbol')){
-  $('symbol').value=qp.get('symbol')||'';
-  $('name').value=qp.get('name')||'';
-  $('frame').value=qp.get('frame')||'READY';
-  $('lane').value=qp.get('lane')||'';
-  $('regime').value=qp.get('regime')||'';
-  setActiveTab('entry');
+$('add').onclick=addTrade;$('backup').onclick=csv;$('openVantage').onclick=openVantage;$('openFrame').onclick=openFrame;
+bindEntryForm();
+if(!applyFrameQuery()){
+  const qp=new URLSearchParams(location.search);
+  if(qp.get('symbol')){$('symbol').value=qp.get('symbol')||'';$('name').value=qp.get('name')||'';setSelectValue('frame',qp.get('frame'),'READY');setSelectValue('lane',qp.get('lane'),'');setSelectValue('regime',qp.get('regime'),'');setActiveTab('entry')}
+  applyStopMode();applySizeMode();renderHandoff();
 }
 renderAll();
 if('serviceWorker' in navigator){
