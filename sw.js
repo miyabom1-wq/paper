@@ -1,6 +1,6 @@
-const CACHE='paper-entry-flow-v31';
-const ENHANCEMENT='./paper-monitor-v31.js?v=31';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./paper-monitor-v31.js'];
+const CACHE='paper-entry-flow-v32';
+const ENHANCEMENT='./paper-monitor-v32.js?v=32';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./paper-monitor-v32.js'];
 
 self.addEventListener('install',event=>{
   self.skipWaiting();
@@ -18,7 +18,8 @@ async function injectEnhancement(response){
   const type=response.headers.get('content-type')||'';
   if(!type.includes('text/html'))return response;
   let html=await response.text();
-  if(!html.includes('paper-monitor-v31.js')){
+  html=html.replace(/<script src="\.\/paper-monitor-v\d+\.js\?v=\d+"><\/script>/g,'');
+  if(!html.includes('paper-monitor-v32.js')){
     html=html.replace('</body>',`<script src="${ENHANCEMENT}"></script></body>`);
   }
   const headers=new Headers(response.headers);
