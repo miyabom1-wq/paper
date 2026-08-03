@@ -589,7 +589,7 @@ if(!applyFrameQuery()){
 }
 renderAll();
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js',{scope:'./'});
+  navigator.serviceWorker.register('./sw.js?stable=fd4249b',{scope:'./',updateViaCache:'none'}).then(r=>r.update());
 }
 </script>
 </body>
