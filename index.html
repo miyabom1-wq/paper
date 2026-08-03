@@ -589,8 +589,10 @@ if(!applyFrameQuery()){
 }
 renderAll();
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js',{scope:'./'});
+  navigator.serviceWorker.register('./sw.js?v=34-latest-close',{scope:'./'});
 }
 </script>
+<script src="./paper-monitor-v34.js?v=34"></script>
+<script src="./paper-fx-v33.js?v=33"></script>
 </body>
 </html>

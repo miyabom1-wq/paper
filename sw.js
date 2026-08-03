@@ -1,9 +1,9 @@
-const CACHE='paper-entry-flow-v33';
-const MONITOR='./paper-monitor-v32.js?v=32';
+const CACHE='paper-latest-close-v34-20260803';
+const MONITOR='./paper-monitor-v34.js?v=34';
 const FX='./paper-fx-v33.js?v=33';
 const ASSETS=[
   './','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png',
-  './paper-monitor-v32.js','./paper-fx-v33.js'
+  './paper-monitor-v34.js','./paper-fx-v33.js'
 ];
 
 self.addEventListener('install',event=>{
