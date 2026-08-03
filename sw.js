@@ -1,5 +1,5 @@
-const CACHE='paper-mobile-ui-v35-20260803';
-const MONITOR='./paper-monitor-v32.js?v=35';
+const CACHE='paper-entry-flow-v33';
+const MONITOR='./paper-monitor-v32.js?v=32';
 const FX='./paper-fx-v33.js?v=33';
 const ASSETS=[
   './','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png',
