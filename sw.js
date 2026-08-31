@@ -1,4 +1,4 @@
-const CACHE='position-calculator-icon-v5-20260831';
+const CACHE='position-calculator-final-manual-v5';
 const CORE=['./','./index.html','./manifest.webmanifest','./position-icon-192-v5.png','./position-icon-512-v5.png','./position-icon-maskable-192-v5.png','./position-icon-maskable-512-v5.png'];
 self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)))});
 self.addEventListener('activate',event=>{event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]))});
