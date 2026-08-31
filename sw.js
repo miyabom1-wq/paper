@@ -1,5 +1,5 @@
-const CACHE='position-calculator-v2-20260831';
-const CORE=['./','./index.html','./manifest.webmanifest','./position-icon-192-v2.png','./position-icon-512-v2.png'];
+const CACHE='position-calculator-v3-20260831';
+const CORE=['./','./index.html','./manifest.webmanifest','./position-icon-192-v3.png','./position-icon-512-v3.png'];
 self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)))});
 self.addEventListener('activate',event=>{event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]))});
 self.addEventListener('fetch',event=>{
