@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="POSITION">
-<link rel="manifest" href="./manifest.webmanifest?v=pc4">
-<link rel="apple-touch-icon" href="./position-icon-192-v3.png?v=pc4">
+<link rel="manifest" href="./manifest.webmanifest?v=pc5">
+<link rel="apple-touch-icon" href="./position-icon-192-v5.png?v=pc5">
 <title>POSITION CALCULATOR</title>
 <style>
 :root{--bg:#080a0f;--card:#11141b;--card2:#161a22;--card3:#0d1016;--line:#2b303b;--line2:#202630;--text:#f4f6fa;--muted:#8d96a6;--accent:#e6a919;--accent2:#f1c353;--green:#37d2a7;--red:#ff7474;--shadow:0 10px 28px rgba(0,0,0,.22);--r:20px}
@@ -20,7 +20,7 @@
 <body>
 <div class="wrap" id="app">
   <header class="topbar">
-    <div class="brand"><img class="appicon" src="./position-icon-192-v3.png?v=pc4" alt=""><div><div class="title">POSITION CALCULATOR</div><div class="sub">損益 · FX · 平均単価 · 利確・損切</div></div></div>
+    <div class="brand"><img class="appicon" src="./position-icon-192-v5.png?v=pc5" alt=""><div><div class="title">POSITION CALCULATOR</div><div class="sub">損益 · FX · 平均単価 · 利確・損切</div></div></div>
     <div class="version">v1.3 FINAL</div>
   </header>
 
@@ -162,7 +162,7 @@ document.addEventListener('input',e=>{if(e.target.matches('input,select')){calcA
 $('savePlHistory').addEventListener('click',savePlHistory);$('clearPlHistory').addEventListener('click',()=>{if(!state.history.length)return;state.history=[];renderHistory();persist();toast('履歴をすべて削除しました')});$('clearPlInputs').addEventListener('click',clearPlInputs);$('fxFetchPrice').addEventListener('click',fetchFxCurrent);$('clearFxInputs').addEventListener('click',clearFxInputs);$('clearScenarioInputs').addEventListener('click',clearScenarioInputs);$('saveScenario').addEventListener('click',saveScenario);$('clearScenarioHistory').addEventListener('click',()=>{if(!state.scenarios.length)return;state.scenarios=[];renderScenarioHistory();persist();toast('シナリオをすべて削除しました')});
 $('addAvgRow').addEventListener('click',()=>{const rows=readAvgRows();if(rows.length<10){rows.push({price:0,qty:0});renderAvgRows(rows);persist()}});$('resetAvg').addEventListener('click',()=>{renderAvgRows([{price:0,qty:0},{price:0,qty:0}]);persist()});$('avgRows').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;const rows=readAvgRows();rows.splice(Number(b.dataset.remove),1);renderAvgRows(rows.length?rows:[{price:0,qty:0}]);persist()});$('avgRows').addEventListener('input',()=>{calcAvg();persist()});
 restore();calcAll();
-if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js?v=pc4',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})}
+if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js?v=pc5',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})}
 })();
 </script>
 
